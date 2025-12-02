@@ -5,7 +5,7 @@ async function get_data() {
 }
 
 function createRow(row) {
-    // row = [id, name, type]
+
     const id = row[0];
     const name = row[1];
     const type = row[2];
@@ -23,7 +23,7 @@ function createRow(row) {
 async function load_journal() {
     const table = document.querySelector("#journal");
 
-    let data = await get_data(); // data = array of rows
+    let data = await get_data();
 
     data.forEach(row => {
         const item = createRow(row);
