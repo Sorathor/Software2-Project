@@ -12,7 +12,7 @@ def setup_database():
     # Connection details - UPDATE THESE
     DB_HOST = 'localhost'
     DB_USER = 'root'
-    DB_PASSWORD = 'Cde3xsw2'  # <-- UPDATE WITH YOUR PASSWORD
+    DB_PASSWORD = 'metropolia'  # <-- UPDATE WITH YOUR PASSWORD
     DB_NAME = 'creature_catcher'
 
     try:
