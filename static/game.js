@@ -367,12 +367,14 @@ document
   .addEventListener("click", loadJournalPage);
 document.getElementById("exitBtn").addEventListener("click", () => {
   if (confirm("Are you sure you want to exit?")) {
-    showPage("welcomePage");
-    playerId = null;
-    playerUsername = null;
+    showPage("exitPage");
   }
 });
-
+document.getElementById("againBtn").addEventListener("click", () => {
+  showPage("welcomePage");
+  playerId = null;
+  playerUsername = null;
+});
 document.getElementById("wildBackBtn").addEventListener("click", () => {
   if (!document.getElementById("wildSelection").classList.contains("hidden")) {
     loadExplorePage();
