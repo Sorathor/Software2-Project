@@ -22,7 +22,7 @@ except ImportError:
 class Database:
     """Database connection handler"""
 
-    def __init__(self, host='localhost', user='root', password='', database='creature_catcher'):
+    def __init__(self, host='localhost', user='root', password='metro', database='creature_catcher'):
         self.connection = pymysql.connect(
             host=host,
             user=user,
@@ -659,7 +659,7 @@ if __name__ == "__main__":
         db = Database(
             host='localhost',
             user='root',
-            password='Cde3xsw2',
+            password='metro',
             database='creature_catcher'
         )
         print("✅ Connected!\n")

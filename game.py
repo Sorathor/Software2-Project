@@ -12,7 +12,7 @@ def get_db():
     return Database(
         host='localhost',
         user='root',
-        password='123456789',
+        password='metro',
         database='creature_catcher'
     )
 
