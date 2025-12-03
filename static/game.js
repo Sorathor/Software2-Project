@@ -1,11 +1,21 @@
-const usernameInput = document.getElementById("username");
-
 let playerId = null;
 let playerUsername = null;
 let currentCompanions = [];
 let currentWildCreatures = [];
 let currentCompanionId = null;
 let currentHabitatsData = null;
+
+document.addEventListener("DOMContentLoaded", () => {
+  const params = new URLSearchParams(location.search);
+  playerId = params.get("player_id");
+  playerUsername = params.get("username");
+
+  if (!playerId) {
+    location.href = "/";
+  } else {
+    showPage("mainPage");
+  }
+});
 
 function showPage(pageId) {
   document.querySelectorAll(".page").forEach((page) => {
@@ -23,39 +33,6 @@ function showPopup(message) {
 
 function hidePopup() {
   document.getElementById("popup").classList.add("hidden");
-}
-
-async function play() {
-  const username = usernameInput.value.trim();
-
-  if (!username) {
-    showPopup("Username required!", false);
-    return;
-  }
-
-  try {
-    const response = await fetch("/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ username }),
-    });
-
-    const data = await response.json();
-
-    if (data.success) {
-      playerId = data.player_id;
-      playerUsername = data.username;
-
-      showPage("mainPage");
-    } else {
-      showPopup("Login failed", false);
-    }
-  } catch (error) {
-    showPopup("Error: " + error, false);
-  } finally {
-  }
 }
 
 async function loadExplorePage() {
@@ -351,13 +328,6 @@ async function loadJournalPage() {
 }
 
 // action
-usernameInput.addEventListener("keypress", (e) => {
-  if (e.key === "Enter") {
-    play();
-  }
-});
-
-document.getElementById("loginBtn").addEventListener("click", play);
 document
   .getElementById("exploreBtn")
   .addEventListener("click", loadExplorePage);
@@ -367,13 +337,11 @@ document
   .addEventListener("click", loadJournalPage);
 document.getElementById("exitBtn").addEventListener("click", () => {
   if (confirm("Are you sure you want to exit?")) {
-    showPage("exitPage");
+    location.href = "/";
   }
 });
 document.getElementById("againBtn").addEventListener("click", () => {
-  showPage("welcomePage");
-  playerId = null;
-  playerUsername = null;
+  location.href = "/";
 });
 document.getElementById("wildBackBtn").addEventListener("click", () => {
   if (!document.getElementById("wildSelection").classList.contains("hidden")) {
