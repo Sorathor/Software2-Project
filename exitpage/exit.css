@@ -2,10 +2,10 @@ body{
     background:url("exitbackground.jpg");
     background-size:cover;
     background-position:center;
-    background repeat:no repeat;
+    background-repeat:no repeat;
     font-family:pixelify sans,sans-serif;
     color:#8b4513 ;
-    display:flex;
+    display:flex;   
     justify-content:center;
     align-items:center;
     height:100vh;
