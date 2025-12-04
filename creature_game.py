@@ -659,6 +659,7 @@ if __name__ == "__main__":
         db = Database(
             host='localhost',
             user='root',
+            password='metro',
             password='Faiza350',
             database='creature_catcher'
         )
