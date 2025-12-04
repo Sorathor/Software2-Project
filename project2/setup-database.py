@@ -12,7 +12,7 @@ def setup_database():
     # Connection details - UPDATE THESE
     DB_HOST = 'localhost'
     DB_USER = 'root'
-    DB_PASSWORD = '123456789'  # <-- UPDATE WITH YOUR PASSWORD
+    DB_PASSWORD = '123'  # <-- UPDATE WITH YOUR PASSWORD
     DB_NAME = 'creature_catcher'
 
     try:
@@ -22,7 +22,7 @@ def setup_database():
             host=DB_HOST,
             user=DB_USER,
             password=DB_PASSWORD,
-            charset='utf8mb4'
+           database=DB_NAME
         )
 
         with connection.cursor() as cursor:

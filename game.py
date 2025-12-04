@@ -7,24 +7,26 @@ from creature_game import Database, Game, Player, Creature, PlayerCreature, Habi
 app = Flask(__name__)
 CORS(app)
 
-##connect database
+# connect database
+
+
 def get_db():
     return Database(
-        host='localhost',
+        host='127.0.0.1',
         user='root',
-        password='metro',
+        password='123',
         database='creature_catcher'
     )
 
 
 @app.route('/')
-def index():
+def login_page():
+    return send_from_directory('loginpage', 'login.html')
+
+
+@app.route('/game')
+def game_page():
     return render_template('index.html')
-
-
-@app.route('/images/<path:filename>')
-def serve_image(filename):
-    return send_from_directory('images', filename)
 
 
 @app.route('/login', methods=['POST'])
@@ -71,11 +73,16 @@ def login():
         messages.append(f"❌ Error: {str(e)}")
         return jsonify({'success': False, 'messages': messages}), 500
 
-##explore
+# explore
+
+
 @app.route('/explore/start', methods=['GET'])
 def explore_start():
     """Start exploration - show companions"""
     player_id = request.args.get('player_id')
+
+    if not player_id:
+        return jsonify({'error': 'Player ID required'}), 400
 
     try:
         db = get_db()
