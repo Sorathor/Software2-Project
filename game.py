@@ -12,9 +12,9 @@ CORS(app)
 
 def get_db():
     return Database(
-        host='localhost',
+        host='127.0.0.1',
         user='root',
-        password='123456789',
+        password='123',
         database='creature_catcher'
     )
 
