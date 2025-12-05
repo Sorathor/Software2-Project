@@ -14,7 +14,7 @@ def get_db():
     return Database(
         host='127.0.0.1',
         user='root',
-        password='123',
+        password='123456789',
         database='creature_catcher'
     )
 
@@ -22,6 +22,16 @@ def get_db():
 @app.route('/')
 def login_page():
     return send_from_directory('loginpage', 'login.html')
+
+
+@app.route('/journal_page/<path:filename>')
+def journal_page_files(filename):
+    return send_from_directory('journal', filename)
+
+
+@app.route('/images/<path:filename>')
+def image_files(filename):
+    return send_from_directory('images', filename)
 
 
 @app.route('/game')
