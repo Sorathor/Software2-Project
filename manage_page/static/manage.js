@@ -10,9 +10,9 @@ h4.innerText = "";
 
 const edit = document.getElementById("Editbtn");
 edit.addEventListener("click", async () => {
-    console.log("clicked successfully");
+    console.log("You Clicked the Edit Button");
 
-    value1, (value2 = await edit_btn());
+    value1, value2 = await edit_btn();
 
     let value3 = await move_creature(value1, value2);
     console.log(value3, "this is value 3");
@@ -21,19 +21,18 @@ edit.addEventListener("click", async () => {
 async function edit_btn() {
     let div = document.querySelector("#manage_btn");
 
-    h4.innerText = "select the image you want to move";
+    h4.innerText = "Click the creature image that you want to move";
 
     div.appendChild(h4);
 
     value1 = await after_click();
 
-    h4.innerText = `You Selected ${value1}`;
+    h4.innerText = `You Selected ${value1.toUpperCase()}\n Click the habitat name where you want it to locate` ;
 
-    h4.innerText = "select the  you destination habitat";
-
+    
     value2 = await after_click();
-
-    h4.innerText = `You Selected ${value2}`;
+    ////add the logic to move only after checking the slot if either full or not
+    h4.innerText = `You moved ${value1} to the ${value2}`;
     // console.log(value1,value2)
     return value1, value2;
 }
@@ -73,9 +72,14 @@ const data = document.querySelector(".habitat_table");
 
 async function get_habitat(params) {
     const url = `http://127.0.0.1:8080//habitats?player_id=${player_id}`;
+    try{
     const response = await fetch(url);
     const result = await response.json();
     return result;
+    }
+    catch (error) {
+        return JSON.stringify({ status: "fail", message: str(error) });
+    }
 }
 
 async function move_habitat_API(creatureID, targetID) {
@@ -105,8 +109,8 @@ async function put_habitat(params) {
 
     table.id = "managetable";
     const thead = document.createElement("thead");
-    thead.innerHTML = "<tr><th>Habitat</th><th>Creature</th></tr>";
-
+    thead.innerHTML = "<tr><th>Habitat</th><th colspan='4'>Creature</th></tr>";
+    
     let r = await get_habitat();
     // console.log(r)
     const tbody = document.createElement("tbody");
@@ -133,7 +137,7 @@ async function put_habitat(params) {
             let crtr_name = r["habitats"][i]["creatures"][j]["nickname"];
             // console.log(crtr_name+"This is name")
             let img_name = crtr_name.toLowerCase();
-            let a = `/images/${img_name}.png`;
+            let a = `../static/images/${img_name}.png`;
             td2.innerHTML = `<img src =" ${a}">`;
             // console.log(habitat_num+"number habitat")
             tr.appendChild(td2);
@@ -220,16 +224,17 @@ async function move_creature(value1, value2) {
         }
     }
       
-    console.log(typeof final_creature_id, "type of crt id")
-    console.log(typeof final_habitat_id, "type of hab id")
+    // console.log(typeof final_creature_id, "type of crt id")
+    // console.log(typeof final_habitat_id, "type of hab id")
 
     const move_result  = await move_habitat_API(final_creature_id,final_habitat_id)
     console.log(move_result, "response api")
+    console.log(move_result['messages'][1])
+
     if (move_result.success){
         await put_habitat()
     }
-
-
+    return move_result
 }
 
 get_habitat();
