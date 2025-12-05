@@ -255,76 +255,8 @@ async function moveCreature(creatureId) {
   }
 }
 
-async function loadJournalPage() {
-  showPage("journalPage");
-
-  try {
-    const response = await fetch(`/journal?player_id=${playerId}`);
-    const data = await response.json();
-
-    if (data.success) {
-      const journalList = document.getElementById("journalList");
-      journalList.innerHTML = "";
-
-      const discovered = data.discovered_count || 0;
-      const total = data.total_species || 16;
-
-      const summary = document.createElement("div");
-      summary.style.gridColumn = "1 / -1";
-      summary.style.marginBottom = "20px";
-      summary.textContent = `Discovered: ${discovered}/${total} species`;
-      journalList.appendChild(summary);
-
-      if (data.creatures) {
-        data.creatures.forEach((creature) => {
-          const item = document.createElement("div");
-          item.className = "journal-item";
-
-          if (creature.discovered) {
-            if (creature.image) {
-              const img = document.createElement("img");
-              img.src = `${creature.image}`;
-              img.alt = creature.name;
-              item.appendChild(img);
-            } else {
-              const placeholder = document.createElement("div");
-              placeholder.textContent = "No Image";
-              placeholder.style.height = "100px";
-              placeholder.style.display = "flex";
-              placeholder.style.alignItems = "center";
-              placeholder.style.justifyContent = "center";
-              placeholder.style.border = "1px dashed #ffffffff";
-              item.appendChild(placeholder);
-            }
-
-            const info = document.createElement("p");
-            info.innerHTML = `<strong>${creature.name}</strong><br>(${creature.type})`;
-            item.appendChild(info);
-          } else {
-            const placeholder = document.createElement("div");
-            placeholder.textContent = "?";
-            placeholder.style.fontSize = "40px";
-            placeholder.style.height = "100px";
-            placeholder.style.display = "flex";
-            placeholder.style.alignItems = "center";
-            placeholder.style.justifyContent = "center";
-            placeholder.style.background = "#000000";
-            item.appendChild(placeholder);
-
-            const info = document.createElement("p");
-            info.textContent = "???";
-            item.appendChild(info);
-          }
-
-          journalList.appendChild(item);
-        });
-      }
-    }
-  } catch (error) {
-    showPopup("Error: " + error, false);
-    showPage("mainPage");
-  } finally {
-  }
+function loadJournalPage() {
+  window.location.href = `/journal_page/viewjournal.html?player_id=${playerId}`;
 }
 
 // action
