@@ -12,7 +12,7 @@ def setup_database():
     # Connection details - UPDATE THESE
     DB_HOST = 'localhost'
     DB_USER = 'root'
-    DB_PASSWORD = 'metropolia'  # <-- UPDATE WITH YOUR PASSWORD
+    DB_PASSWORD = '123456789'  # <-- UPDATE WITH YOUR PASSWORD
     DB_NAME = 'creature_catcher'
 
     try:
@@ -35,7 +35,7 @@ def setup_database():
             # You can paste the SQL here or read from file
             # For now, let's read from the schema file
             try:
-                with open('creature_schema.sql', 'r') as f:
+                with open('Software2-Project\creature_schema.sql', 'r') as f:
                     sql_content = f.read()
 
                 # Split by semicolons and execute each statement
