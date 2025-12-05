@@ -5,7 +5,7 @@ connection = mysql.connector.connect(
          port= 5000,
          database='creature_catcher',
          user='root',
-         password='metro',
+         password='123456789',
          autocommit=True
          )
 
