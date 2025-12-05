@@ -8,10 +8,10 @@ import mysql.connector
 @app.route('/journal', methods=['GET'])
 def get_journal():
     db = mysql.connector.connect(
-        host="localhost",
-        user="root",
-        passwd="123",
-        database="creature_catcher"
+        host='127.0.0.1',
+        user='root',
+        password='123456789',
+        database='creature_catcher'
     )
     cursor = db.cursor()
     cursor.execute("""SELECT a.id AS SN, a.name AS name, b.name AS type FROM creatures a LEFT JOIN types b ON a.id = b.id""")
