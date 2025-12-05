@@ -12,7 +12,7 @@ const edit = document.getElementById("Editbtn");
 edit.addEventListener("click", async () => {
     console.log("clicked successfully");
 
-    value1, (value2 = await edit_btn());
+    value1, value2 = await edit_btn();
 
     let value3 = await move_creature(value1, value2);
     console.log(value3, "this is value 3");

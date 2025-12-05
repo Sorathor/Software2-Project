@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap');
 
 ul {
   list-style: none;
@@ -6,21 +7,31 @@ ul {
 }
 
 body {
+    font-family: "pixelify sans", sans-serif ;
     text-align: center;
-    background: sandybrown;
+    color: #8b4513;
+    background-image: url("background.jpg");
+    font-size: 40px;
+    text-shadow: 0px 0px 10px rgba(0,0,0,0.3); /* adding shadow behind the text, to make it more visible*/
+
 }
 
 button {
-  padding: 50px 550px;
-  margin: 8px;
-  width: 200px;
-  height: 50px;
-  font-size: 16px;
-  background-color: darkgreen;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
+    padding: 40px 300px;
+    margin: 4px;
+    width: 200px;
+    height: 60px;
+    background-color: #7ed957;
+    color: #8b4513;
+    border: none;
+    border-radius: 2px;
+    cursor: pointer;
+    font-family: "Pixelify Sans", sans-serif;
+    font-size: 22px;
+    text-align: center;
+    white-space: nowrap;
+    line-height: 10px;
+    text-indent: -40px; /* moving the text more to the center */
 }
 
 button:hover {
