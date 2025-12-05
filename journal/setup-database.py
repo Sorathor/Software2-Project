@@ -22,7 +22,7 @@ def setup_database():
             host=DB_HOST,
             user=DB_USER,
             password=DB_PASSWORD,
-           database=DB_NAME
+            database=DB_NAME
         )
 
         with connection.cursor() as cursor:
@@ -39,15 +39,18 @@ def setup_database():
                     sql_content = f.read()
 
                 # Split by semicolons and execute each statement
-                statements = [s.strip() for s in sql_content.split(';') if s.strip()]
+                statements = [s.strip()
+                              for s in sql_content.split(';') if s.strip()]
 
                 for i, statement in enumerate(statements, 1):
                     try:
                         cursor.execute(statement)
                         if i % 10 == 0:
-                            print(f"  Executed {i}/{len(statements)} statements...")
+                            print(
+                                f"  Executed {i}/{len(statements)} statements...")
                     except Exception as e:
-                        print(f"  Warning: Statement {i} failed: {str(e)[:50]}")
+                        print(
+                            f"  Warning: Statement {i} failed: {str(e)[:50]}")
 
                 connection.commit()
                 print(f"✅ Database setup complete!")
