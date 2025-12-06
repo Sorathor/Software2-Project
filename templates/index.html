@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Creature Capture</title>
+    <link rel="stylesheet" href="static/game.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <!-- main page -->
+      <div id="mainPage" class="page active">
+        <h1>Main Page</h1>
+        <ul>
+          <li><button id="exploreBtn">Explore</button></li>
+          <li><button id="manageBtn">Manage</button></li>
+          <li><button id="journalBtn">View Journal</button></li>
+          <li><button id="exitBtn">Exit</button></li>
+        </ul>
+      </div>
+
+      <!-- explore page -->
+      <div id="explorePage" class="page">
+        <div class="explore-modal">
+          <h1>Explore</h1>
+          <div id="exploreContent">
+            <!-- companion select -->
+            <div id="companionSelection">
+              <p>Choose companions:</p>
+              <div id="companionList" class="item-list"></div>
+            </div>
+            <!-- wild select -->
+            <div id="wildSelection" class="hidden">
+              <p>Choose the wild creature:</p>
+              <div id="wildList" class="item-list"></div>
+              <button class="btn" id="wildBackBtn">Back</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- manage page -->
+      <div id="managePage" class="page">
+        <h1>Manage</h1>
+        <div id="manageContent">
+          <div class="habitats-grid">
+            <div class="habitat-box">
+              <h3>Habitat 1</h3>
+              <div id="habitat1" class="creature-slots"></div>
+            </div>
+            <div class="habitat-box">
+              <h3>Habitat 2</h3>
+              <div id="habitat2" class="creature-slots"></div>
+            </div>
+            <div class="habitat-box">
+              <h3>Habitat 3</h3>
+              <div id="habitat3" class="creature-slots"></div>
+            </div>
+            <div class="habitat-box">
+              <h3>Habitat 4</h3>
+              <div id="habitat4" class="creature-slots"></div>
+            </div>
+          </div>
+          <div class="unplaced-box">
+            <h3>Unplaced</h3>
+            <div id="unplacedList" class="creature-slots"></div>
+          </div>
+        </div>
+        <button class="btn" id="manageBackBtn">Back</button>
+      </div>
+
+      <!-- exit page -->
+      <div id="exitPage" class="page">
+        <h1>You have successfully logged out.</h1>
+        <h1>Thank you for playing creature catch.</h1>
+        <h1>Click play to play again.</h1>
+        <button id="againBtn" class="btn">Play</button>
+      </div>
+
+      <!-- popup -->
+      <div id="popup" class="popup hidden">
+        <div class="popup-content">
+          <p id="popupMessage"></p>
+          <button class="btn" id="popupOkBtn">OK</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="static/game.js"></script>
+  </body>
+</html>

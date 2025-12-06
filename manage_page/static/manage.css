@@ -1,0 +1,104 @@
+@font-face {
+  font-family: "pixelify";
+  src:
+    url('./PixelifySans-Regular.ttf') format('truetype')
+}
+
+body{
+    background-image: url('./managepage.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size:cover;
+    background-attachment: fixed;
+    font-family: pixelify, sans-serif 
+   
+}
+
+.managepagemain{
+    max-width: 100%;
+    /* margin: auto; */
+    padding: 0px;
+    border-radius: 10px;
+    
+}
+
+.habitat_table{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+   
+    
+    max-width: 100%;
+    
+    
+}
+
+#managetable{
+    justify-content:space-evenly;
+    align-items: center;
+    width: 90%;
+    border: 1px solid black;
+    /* border-radius: 20px; */
+    background-color: rgba(187, 173, 124, 0.5);
+    /* background-color: #7ed957; */
+    color: white;
+    border-collapse: collapse;
+    /* box-shadow: rgba(187, 173, 124, 1) */
+
+}
+
+#managetable thead th{
+    background-color: #8b4513;
+   
+    padding: 10px;
+    font-size: 30px;
+    
+    text-align: center; 
+    
+  
+}
+
+#managetable tbody{
+    color: black;
+    font-size: 15px;
+    
+}
+#managetable tbody td{
+    padding: 10px;
+    font-size: 20px;
+}
+
+#managetable tbody tr td:hover{
+    background-color: #bbad7c    
+}
+
+#managetable tbody td img{
+    width: 155px;
+    height: 145px;
+}
+#manage_btn{
+    display: flex;
+    justify-content:center;
+    align-items: center;
+
+}
+#manage_btn button{
+    background: #7ed957;
+    font-family: pixelify;
+    padding: 10px;
+    margin: 30px;
+    
+}
+
+#pagetitle{
+    display: flex;
+    justify-content: center;
+    
+}
+#pagetitle h1{
+    color: white ;
+    font-size: 58.8px;
+}
+/* #habitat_row{
+    background-color: white;
+} */

@@ -12,7 +12,7 @@ def setup_database():
     # Connection details - UPDATE THESE
     DB_HOST = 'localhost'
     DB_USER = 'root'
-    DB_PASSWORD = 'Faiza350'  # <-- UPDATE WITH YOUR PASSWORD
+    DB_PASSWORD = '123456789'  # <-- UPDATE WITH YOUR PASSWORD
     DB_NAME = 'creature_catcher'
 
     try:
@@ -22,7 +22,7 @@ def setup_database():
             host=DB_HOST,
             user=DB_USER,
             password=DB_PASSWORD,
-            charset='utf8mb4'
+            database=DB_NAME
         )
 
         with connection.cursor() as cursor:
@@ -35,19 +35,22 @@ def setup_database():
             # You can paste the SQL here or read from file
             # For now, let's read from the schema file
             try:
-                with open('creature_schema.sql', 'r') as f:
+                with open('Software2-Project\creature_schema.sql', 'r') as f:
                     sql_content = f.read()
 
                 # Split by semicolons and execute each statement
-                statements = [s.strip() for s in sql_content.split(';') if s.strip()]
+                statements = [s.strip()
+                              for s in sql_content.split(';') if s.strip()]
 
                 for i, statement in enumerate(statements, 1):
                     try:
                         cursor.execute(statement)
                         if i % 10 == 0:
-                            print(f"  Executed {i}/{len(statements)} statements...")
+                            print(
+                                f"  Executed {i}/{len(statements)} statements...")
                     except Exception as e:
-                        print(f"  Warning: Statement {i} failed: {str(e)[:50]}")
+                        print(
+                            f"  Warning: Statement {i} failed: {str(e)[:50]}")
 
                 connection.commit()
                 print(f"✅ Database setup complete!")
