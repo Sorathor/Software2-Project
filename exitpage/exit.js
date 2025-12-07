@@ -1,4 +1,4 @@
-const playBtn = document.getElementById(playBtn);
+const playBtn = document.getElementById("playBtn");
 playBtn.addEventListener("click", () => {
-  window.location.href = "login.html";
+  window.location.href = "/";
 });
