@@ -1,6 +1,12 @@
 const btn = document.getElementById("enterBtn");
 const username = document.getElementById("username");
 
+username.addEventListener("keydown", (event) => {
+  if (event.key === "Enter") {
+    btn.click();
+  }
+});
+
 btn.addEventListener("click", async () => {
   const user = username.value.trim();
   if (user === "") {
