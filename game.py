@@ -31,6 +31,18 @@ class Front(Base):
     def image_files(self, filename):
         return send_from_directory('images', filename)
 
+    def manage_page(self):
+        return send_from_directory('manage_page/templates', 'manage.html')
+
+    def manage_assets(self, filename):
+        return send_from_directory('manage_page/static', filename)
+
+    def exit_page(self):
+        return send_from_directory('exitpage','exit.html')
+    
+    def exit_assets(self, filename):
+        return send_from_directory('exitpage', filename)
+
 
 class Authentication(Base):
     def login(self):
@@ -479,6 +491,10 @@ class CreatureCatcherApp:
         def game_page():
             return self.front.game_page()
 
+        @self.app.route('/manage')
+        def manage_page():
+            return self.front.manage_page()
+
         @self.app.route('/loginpage/<path:filename>')
         def login_assets(filename):
             return self.front.login_assets(filename)
@@ -490,6 +506,10 @@ class CreatureCatcherApp:
         @self.app.route('/images/<path:filename>')
         def image_files(filename):
             return self.front.image_files(filename)
+
+        @self.app.route('/manage_page/static/<path:filename>')
+        def manage_assets(filename):
+            return self.front.manage_assets(filename)
 
         # API routes
         @self.app.route('/login', methods=['POST'])
@@ -519,6 +539,14 @@ class CreatureCatcherApp:
         @self.app.route('/journal', methods=['GET'])
         def view_journal():
             return self.journal.view_journal()
+
+        @self.app.route('/exit')
+        def exit_page():
+            return self.front.exit_page()
+
+        @self.app.route('/exitpage/<path:filename>')
+        def exit_assets(filename):
+            return self.front.exit_assets(filename)
 
     def run(self):
         self.app.run(debug=True, host='127.0.0.1', port=8080)
