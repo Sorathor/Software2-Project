@@ -38,8 +38,8 @@ class Front(Base):
         return send_from_directory('manage_page/static', filename)
 
     def exit_page(self):
-        return send_from_directory('exitpage','exit.html')
-    
+        return send_from_directory('exitpage', 'exit.html')
+
     def exit_assets(self, filename):
         return send_from_directory('exitpage', filename)
 
@@ -511,7 +511,15 @@ class CreatureCatcherApp:
         def manage_assets(filename):
             return self.front.manage_assets(filename)
 
+        @self.app.route('/exit')
+        def exit_page():
+            return self.front.exit_page()
+
+        @self.app.route('/exitpage/<path:filename>')
+        def exit_assets(filename):
+            return self.front.exit_assets(filename)
         # API routes
+
         @self.app.route('/login', methods=['POST'])
         def login():
             return self.authentication.login()
@@ -539,14 +547,6 @@ class CreatureCatcherApp:
         @self.app.route('/journal', methods=['GET'])
         def view_journal():
             return self.journal.view_journal()
-
-        @self.app.route('/exit')
-        def exit_page():
-            return self.front.exit_page()
-
-        @self.app.route('/exitpage/<path:filename>')
-        def exit_assets(filename):
-            return self.front.exit_assets(filename)
 
     def run(self):
         self.app.run(debug=True, host='127.0.0.1', port=8080)
