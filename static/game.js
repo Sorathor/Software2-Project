@@ -138,116 +138,10 @@ async function catchCreature(wildCreatureId, effectiveness) {
         ? "Success! Creature caught!"
         : "Failed! Creature escaped.";
       showPopup(message, data.caught);
-
-      setTimeout(() => {
+      document.getElementById("wildBackBtn").addEventListener("click", () => {
         hidePopup();
         showPage("mainPage");
-      }, 2000);
-    }
-  } catch (error) {
-    showPopup("Error: " + error, false);
-  } finally {
-  }
-}
-
-async function loadManagePage() {
-  showPage("managePage");
-
-  try {
-    const response = await fetch(`/habitats?player_id=${playerId}`);
-    const data = await response.json();
-
-    if (data.success) {
-      currentHabitatsData = data.habitats;
-
-      for (let i = 1; i <= 4; i++) {
-        document.getElementById(`habitat${i}`).innerHTML = "";
-      }
-      data.habitats.forEach((habitat) => {
-        const habitatEl = document.getElementById(`habitat${habitat.number}`);
-
-        if (habitat.creatures && habitat.creatures.length > 0) {
-          habitat.creatures.forEach((creature) => {
-            const div = document.createElement("div");
-            div.className = "creature-item";
-            div.textContent = `${creature.nickname} (${creature.type})`;
-            div.onclick = () => moveCreature(creature.id, habitat.id);
-            habitatEl.appendChild(div);
-          });
-        } else {
-          habitatEl.textContent = "(empty)";
-        }
       });
-
-      const unplacedEl = document.getElementById("unplacedList");
-      unplacedEl.innerHTML = "";
-
-      if (data.unplaced && data.unplaced.length > 0) {
-        data.unplaced.forEach((creature) => {
-          const div = document.createElement("div");
-          div.className = "creature-item";
-          div.textContent = `${creature.nickname} (${creature.type})`;
-          div.onclick = () => moveCreature(creature.id, null);
-          unplacedEl.appendChild(div);
-        });
-      } else {
-        unplacedEl.textContent = "(none)";
-      }
-    }
-  } catch (error) {
-    showPopup("Error: " + error, false);
-    showPage("mainPage");
-  } finally {
-  }
-}
-
-async function moveCreature(creatureId) {
-  // Ask user hab
-  const targetHabitat = prompt("Move to habitat (1-4) or 0 for unplaced:");
-
-  if (targetHabitat === null) return;
-
-  const targetNum = parseInt(targetHabitat);
-
-  if (isNaN(targetNum) || targetNum < 0 || targetNum > 4) {
-    showPopup("Invalid habitat number", false);
-    return;
-  }
-
-  let targetHabitatId = null;
-  if (targetNum > 0) {
-    const targetHab = currentHabitatsData.find((h) => h.number === targetNum);
-    if (targetHab) {
-      targetHabitatId = targetHab.id;
-    }
-  }
-
-  try {
-    const response = await fetch("/move", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        player_id: playerId,
-        creature_id: creatureId,
-        target_habitat_id: targetHabitatId,
-      }),
-    });
-
-    const data = await response.json();
-
-    if (data.success) {
-      showPopup("Creature moved successfully!", true);
-      setTimeout(() => {
-        hidePopup();
-        loadManagePage();
-      }, 1000);
-    } else {
-      showPopup(
-        data.messages ? data.messages.join("\n") : "Move failed",
-        false
-      );
     }
   } catch (error) {
     showPopup("Error: " + error, false);
@@ -256,20 +150,22 @@ async function moveCreature(creatureId) {
 }
 
 function loadJournalPage() {
-  window.location.href = `/journal_page/viewjournal.html?player_id=${playerId}`;
+  location.href = `/journal_page/viewjournal.html?player_id=${playerId}`;
 }
 
 // action
 document
   .getElementById("exploreBtn")
   .addEventListener("click", loadExplorePage);
-document.getElementById("manageBtn").addEventListener("click", loadManagePage);
+document.getElementById("manageBtn").addEventListener("click", () => {
+  location.href = "/manage" + location.search;
+});
 document
   .getElementById("journalBtn")
   .addEventListener("click", loadJournalPage);
 document.getElementById("exitBtn").addEventListener("click", () => {
   if (confirm("Are you sure you want to exit?")) {
-    location.href = "/";
+    location.href = "/exit";
   }
 });
 document.getElementById("againBtn").addEventListener("click", () => {
@@ -282,11 +178,7 @@ document.getElementById("wildBackBtn").addEventListener("click", () => {
     showPage("mainPage");
   }
 });
-
-document
-  .getElementById("manageBackBtn")
-  .addEventListener("click", () => showPage("mainPage"));
-document
-  .getElementById("journalBackBtn")
-  .addEventListener("click", () => showPage("mainPage"));
-document.getElementById("popupOkBtn").addEventListener("click", hidePopup);
+document.getElementById("popupOkBtn").addEventListener("click", () => {
+  hidePopup();
+  showPage("mainPage");
+});
