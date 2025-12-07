@@ -148,11 +148,6 @@ async function catchCreature(wildCreatureId, effectiveness) {
   } finally {
   }
 }
-
-function loadJournalPage() {
-  location.href = `/journal_page/viewjournal.html?player_id=${playerId}`;
-}
-
 // action
 document
   .getElementById("exploreBtn")
@@ -160,16 +155,13 @@ document
 document.getElementById("manageBtn").addEventListener("click", () => {
   location.href = "/manage" + location.search;
 });
-document
-  .getElementById("journalBtn")
-  .addEventListener("click", loadJournalPage);
+document.getElementById("journalBtn").addEventListener("click", () => {
+  location.href = `/journal_page/viewjournal.html?player_id=${playerId}`;
+});
 document.getElementById("exitBtn").addEventListener("click", () => {
   if (confirm("Are you sure you want to exit?")) {
     location.href = "/exit";
   }
-});
-document.getElementById("againBtn").addEventListener("click", () => {
-  location.href = "/";
 });
 document.getElementById("wildBackBtn").addEventListener("click", () => {
   if (!document.getElementById("wildSelection").classList.contains("hidden")) {
@@ -177,6 +169,9 @@ document.getElementById("wildBackBtn").addEventListener("click", () => {
   } else {
     showPage("mainPage");
   }
+});
+document.getElementById("exploreBackBtn").addEventListener("click", () => {
+  showPage("mainPage");
 });
 document.getElementById("popupOkBtn").addEventListener("click", () => {
   hidePopup();
