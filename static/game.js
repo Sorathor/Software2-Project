@@ -148,19 +148,41 @@ async function catchCreature(wildCreatureId, effectiveness) {
   } finally {
   }
 }
+async function completeCheck() {
+  if (!playerId) return false;
+  try {
+    const response = await fetch(`/check_completion?player_id=${playerId}`);
+    const data = await response.json();
+    if (data.success && data.completed) {
+      location.href = "/congrat";
+      return true;
+    }
+  } catch (error) {
+    console.error("Error checking completion:", error);
+  }
+  return false;
+}
+
 // action
-document
-  .getElementById("exploreBtn")
-  .addEventListener("click", loadExplorePage);
+document.getElementById("exploreBtn").addEventListener("click", async () => {
+  const Done = await completeCheck();
+  if (!Done) {
+    loadExplorePage();
+  }
+});
+
 document.getElementById("manageBtn").addEventListener("click", () => {
   location.href = "/manage" + location.search;
 });
 document.getElementById("journalBtn").addEventListener("click", () => {
   location.href = `/journal_page/viewjournal.html?player_id=${playerId}`;
 });
-document.getElementById("exitBtn").addEventListener("click", () => {
-  if (confirm("Are you sure you want to exit?")) {
-    location.href = "/exit";
+document.getElementById("exitBtn").addEventListener("click", async () => {
+  const Done = await completeCheck();
+  if (!Done) {
+    if (confirm("Are you sure you want to exit?")) {
+      location.href = "/exit";
+    }
   }
 });
 document.getElementById("wildBackBtn").addEventListener("click", () => {

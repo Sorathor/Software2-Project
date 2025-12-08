@@ -40,6 +40,9 @@ class Front(Base):
     def exit_page(self):
         return send_from_directory('exitpage', 'exit.html')
 
+    def congrat_page(self):
+        return send_from_directory('exitpage', 'congrat.html')
+
     def exit_assets(self, filename):
         return send_from_directory('exitpage', filename)
 
@@ -233,6 +236,28 @@ class Explore(Base):
                 'messages': messages,
                 'wild_creatures': wild_data,
                 'companion_id': companion.id
+            })
+
+        except Exception as e:
+            return jsonify({'error': str(e)}), 500
+
+    def check_completion(self):
+        player_id = request.args.get('player_id')
+
+        if not player_id:
+            return jsonify({'error': 'Player ID required'}), 400
+
+        try:
+            db = self.get_db()
+            player = Player.from_db(db, int(player_id))
+            discovered = player.get_discovered_species(db)
+
+            # Check if all discovered
+            is_complete = len(discovered) >= 16
+
+            return jsonify({
+                'success': True,
+                'completed': is_complete
             })
 
         except Exception as e:
@@ -547,6 +572,14 @@ class CreatureCatcherApp:
         @self.app.route('/journal', methods=['GET'])
         def view_journal():
             return self.journal.view_journal()
+
+        @self.app.route('/congrat')
+        def congrat_page():
+            return self.front.congrat_page()
+
+        @self.app.route('/check_completion', methods=['GET'])
+        def check_completion():
+            return self.explore.check_completion()
 
     def run(self):
         self.app.run(debug=True, host='127.0.0.1', port=8080)
