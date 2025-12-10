@@ -1,94 +1,36 @@
-const player_id = 2;
-let value1 = null;
-let value2 = null;
-const table = document.querySelector(".habitat_table");
-const cdiv = document.createElement("div");
-let h4 = document.createElement("h4");
-h4.innerText = null;
-const edit = document.getElementById("Editbtn");
+const params = new URLSearchParams(location.search);
+const player_id = params.get("player_id");
 
-//adding event listener to edit button
-edit.addEventListener("click", async () => {
-    console.log("You Clicked the Edit Button its in edit.addevntlistnr");
-    value1, value2 = await edit_btn();
-    console.log("This is the value1 in edit.addevntlistnr",value1, "/nThis is the value 2 edit.addevntlistnr", value2)
-    let value3 = await move_creature(value1, value2);
-    console.log(value3, "this is value 3 edit.addevntlistnr");
-});
-
-//text in div of edit after click
-async function edit_btn() {
-    let div = document.querySelector("#manage_btn");
-    h4.innerText = "Click the creature image that you want to move";
-    div.appendChild(h4);
-    value1 = await after_click();
-    h4.innerText = `You Selected ${value1.toUpperCase()}\n Click the habitat name where you want it to locate` ;
-    value2 = await after_click();
-    confirm_the_move = await get_habitat()
-    console.log(confirm_the_move, ">>>>>><<<<<<")
-    ////TODO - add the logic to move only after checking the slot if either full or not
-    // h4.innerText = `You moved ${value1} to the ${value2}`;
-        
-    return value1, value2;
+if (!player_id) {
+  location.href = "/";
 }
 
-// name of creature and habitat selected
-function after_click() {
-    return new Promise((resolve) => {
-        function handler(event) {
-            const target = event.target;
+// if (!player_id) {
+//   location.href = "/";
+// }
+let creature_name_to_move = null;
+let habitat_id_to_move = null;
+let divbox_selection = document.querySelector(".habitat_table") 
+let divbox_selection_buttons = document.querySelector("#manage_btn")
+let edit_btn = document.querySelector("#Editbtn")
+let edit_text = document.createElement('h4')
+// edit_text.id = 'normal_color'
+edit_text.innerHTML = ''
+divbox_selection_buttons.appendChild(edit_text)
 
-            //if an image is selected
-            if (target.tagName === "IMG") {
-                const alt = target.alt;
-                          
-                table.removeEventListener("click", handler); 
-                resolve(alt); 
-            }
-
-            //if habitat row is selectd
-            else if (target.tagName === "TD" && target.cellIndex === 0) {
-                const habitatName = target.innerText.trim();
-                if (target.innerText.startsWith('Hab')){
-                    table.removeEventListener("click", handler);
-                    resolve(habitatName);
-                 }
-
-                if (target.innerHTML.startsWith('Unp')){
-                    console.log("unplaced selected")
-                    table.removeEventListener("click", handler);
-                    resolve(habitatName);
-                } 
-
-                }
-                // console.log(target, 'new target to find unplaced')
-                // console.dir(target)
-                // console.log("User clicked habitat:", habitatName);
-
-                
-        }
-
-        table.addEventListener("click", handler);
-    });
+//load creatures in the habitat api call 
+async function get_habitat_api() {
+    let url = `http://127.0.0.1:8080//habitats?player_id=${player_id}`
+    const response = await fetch(url)
+    const result = await response.json()
+    // console.log(result, "The result of api call from get_habitat_api function")
+    return result
 }
-
-// const data = document.querySelector(".habitat_table");
-
-//api call to get the habitat table
-async function get_habitat(params) {
-    const url = `http://127.0.0.1:8080//habitats?player_id=${player_id}`;
-    try{
-    const response = await fetch(url);
-    const result = await response.json();
-    return result; 
-    }
-    catch (error) {
-        return JSON.stringify({ status: "fail", message: str(error) });
-    }
-}
-//api call to post the move 
 async function move_habitat_API(creatureID, targetID) {
-    let url = `http://127.0.0.1:8080/move`;
+    // console.log(creatureID)
+    // console.log(targetID)
+    
+    let url = `http://127.0.0.1:8080/move`
     try {
         const response = await fetch(url, {
             method: "POST",
@@ -98,71 +40,22 @@ async function move_habitat_API(creatureID, targetID) {
                 creature_id: creatureID,
                 target_habitat_id: targetID,
             }),
-        });
-        const result = await response.json();
-        return result;
+        })
+        const result = await response.json()
+        return result
     } catch (error) {
-        return JSON.stringify({ status: "fail", message: str(error) });
+        return JSON.stringify({ status: "fail", message: str(error) })
     }
 }
-// //adding creatures to the habitat
-// async function put_habitat(params) {
-//     let r = await get_habitat();
-//     // console.log(r)
-//     const habitatbox = document.querySelector(".habitat_table");
-//     habitatbox.innerHTML = "";
-//     const table = document.createElement("table");
-//     table.id = "managetable";
-//     const thead = document.createElement("thead");
-//     thead.innerHTML = "<tr><th>Habitat</th><th colspan='4'>Creatures</th></tr>";
-//     // thead.id="habitat_row"
-//     const tbody = document.createElement("tbody");
-//     table.appendChild(thead);
-//     table.appendChild(tbody);
-//     habitatbox.appendChild(table);
 
-//     //loop through result to fetch the habitat number
-//     for (let i = 0; i < r["habitats"].length; i++) {
-//         let tr = document.createElement("tr");
-//         let num = r["habitats"][i];
-//         // console.log(num, "index of habitat")
-//         let td = document.createElement("td");
-//         let habitat_num = `Habitat ${num.number}`;
-//         // console.log(habitat_num,"hab num")
-//         td.innerText = `${habitat_num}`;
-//         tr.appendChild(td);
-
-//         //loop to get the specific creature in specific habitat to get the name for the image src
-//         //append each image in the specific tr of the table
-
-//         for (let j = 0; j < r["habitats"][i]["creatures"].length; j++) {
-//             let td2 = document.createElement("td");
-//             let crtr_name = r["habitats"][i]["creatures"][j]["nickname"];
-//             // console.log(crtr_name+"This is name")
-//             let img_name = crtr_name.toLowerCase();
-//             let a = `../static/images/${img_name}.png`;
-//             td2.innerHTML = `<img src =" ${a}">`;
-//             // console.log(habitat_num+"number habitat")
-//             tr.appendChild(td2);
-//         }
-//         //append the habitat name in the table
-//         tbody.appendChild(tr);
-//     }
-//     //     const t = document.querySelector("#managetable")
-//     // console.log(t)
-// }
-
-
-
-async function put_habitat() {
+async function get_habitat() {
     //call api function to get the json from the api
-    const call_fn = await get_habitat();
-    let render = document.querySelector(".habitat_table")
-    render.innerHTML=''
+    const call_fn = await get_habitat_api();
     // console.log(call_fn.success, "success or failure msg")
     if (!call_fn.success) return; 
         // console.log(call_fn, "get_habitat result api call")
         //create elements to add into the html
+        divbox_selection.innerHTML = ''
         const table_container = document.querySelector('.habitat_table')
         const table = document.createElement("table")
         table.id = "managetable"
@@ -208,7 +101,7 @@ async function put_habitat() {
                 let unplacedtr = document.createElement('tr')
                 let  unplacedtd = document.createElement('td')
 
-                unplacedtd.innerHTML = 'Unplaced Creature'
+                unplacedtd.innerHTML = 'Unplaced'
                 unplacedtr.appendChild(unplacedtd)
                 tbody.appendChild(unplacedtr)
 
@@ -223,132 +116,213 @@ async function put_habitat() {
 
                 }
         }
-    }
+        else {
+            let unplacedtr = document.createElement('tr')
+                let  unplacedtd = document.createElement('td')
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//
-async function move_creature(value1, value2) {
-    let result = await get_habitat();
-    console.log(result, "this is the result of move")
-    let creature_id = result["habitats"][0]["creatures"][0]["id"];
-    // console.log(creature_id,'this is creature id')
-    let target_habitat_id = result["habitats"][0]["id"];
-    // console.log(target_habitat_id)
-    let creature_name = result["habitats"][0]["creatures"][0]["nickname"];
-    // console.log(creature_name, 'crname')
-    let current_habitat = [];
-    for (let i = 0; i < result["habitats"].length; i++) {
-        let serial_num = i + 1;
-        let target_habitat_id = result["habitats"][i]["id"];
-        // let creture_id = ''
-        // let trgt_id=''
-        // if ("value2"=="target_habitat_id"){
-        //     trgt_id = target_habitat_id
-        // }
-        let td = document.createElement("td");
-        // let habitat_num = `Habitat ${serial_num.number}`
-        for (let j = 0; j < result["habitats"][i]["creatures"].length; j++) {
-            let crtr_name = result["habitats"][i]["creatures"][j]["nickname"];
-            let crtr_id = result["habitats"][i]["creatures"][j]["id"];
-
-            response = {
-                id: `${serial_num}`,
-                creaturename: `${crtr_name}`,
-                creatureid: `${crtr_id}`,
-                habitat_id: `${target_habitat_id}`,
-            };
-            current_habitat.push(response);
-            // if ("value1"==="crtr_name"){
-            //     creture_id  = crtr_id
-            //     }
-        }
-
-        // const editbtn = document.querySelector("#Editbtn");
-
-        // const editBtn = document.getElementById("Editbtn");
-    }
-    console.log(value1, value2, "crt name and habittat id in move fn");
-    //    {id: '3', creaturename: 'Obscurine', creatureid: '83', habitat_id: '7'} 'this is inside the 6 loop of current_habitat in move_crtr fn'
-    // return (current_habitat)
-
-    let final_habitat_id = null;
-    let final_creature_id = null;
-    let hab_num = +(value2.split(" ")[1])
-    for (let h of result.habitats){
-        if (h.number === hab_num){
-            final_habitat_id = parseInt(h.id)
+                unplacedtd.innerHTML = 'Unplaced'
+                unplacedtr.appendChild(unplacedtd)
+                tbody.appendChild(unplacedtr)
         }
     }
- 
+// let button_div = document.querySelector("#manage_btn")
+// let h = document.createElement('h3')
+// let edit_mode = Boolean(false)
 
-    for (let i = 0; i < current_habitat.length; i++) {
-        console.log(
-            current_habitat[i],
-            `this is inside the ${i} loop of current_habitat in move_crtr fn`
-        );
-        let crt = current_habitat[i].creaturename;
-        let hbt = current_habitat[i];
+edit_btn.addEventListener('click', async()=>{
+    edit_text.style.color = 'black'
+    console.log('clicked')
+    let m = edit_clik()
+})
 
-        if (crt.toLowerCase() === value1.toLowerCase()) {
-            
-            final_creature_id = parseInt(hbt.creatureid);
-            // console.log(
-            //     hbt.habitat_id,
-            //     final_habitat_id,
-            //     hbt.creatureid,
-            //     final_creature_id,
-            //     "ckk habitat id check insd mv fn if condn"
-            // );
+async function edit_clik(params) {
+    // divbox_selection_buttons.innerText='Click the creature you want to move'
+    edit_text.innerText= null;
+    edit_text.innerText = "Click an image of a creature"
+    setTimeout(()=>{
+        edit_text.innerText = ''
+    },3000)
+    let valuea = await edit_click()
+    console.log(valuea, 'this is valuea')
+    console.log(typeof(valuea), 'check qqq')
+    let z = [1,2,3,4,'U']
+    if (!z.includes(valuea)){
+        edit_text.innerText=`You selected ${valuea}. Now click the habitat you want to move`
+        setTimeout(()=>{
+        edit_text.innerText = ''
+         },3000)
+        edit_text.style.color = '#071bccff'
+        // divbox_selection.style.color = 'green'
+        console.log('if image')
+        let valueb = await edit_click()
+        // console.log(valueb)
+        if (z.includes(valueb)){
+            console.log(valueb)
+            befor_move_api(valuea, valueb)
         }
+        
     }
-      
-    console.log(final_creature_id,  typeof final_creature_id, "type of crt id")
-    console.log(final_habitat_id,typeof final_habitat_id, "type of hab id")
+    else {
+        alert("Click the creature first")
+        // edit_text.innerText="Click the abitat first"
+        console.log('if 1234')
+        }
 
-    const move_result  = await move_habitat_API(final_creature_id,final_habitat_id)
-    if (move_result.success){
-        // await put_habitat()
-
-        h4.innerText="Moved successfully"
-        await put_habitat()
-    }
-    if (!move_result.success){
-        // await put_habitat()
-        h4.innerText="Sorry invalid selection"
-    }
-
-    // console.log(move_result, "response api")
-    // console.log(move_result['messages'][1])
-
-    // if (move_result.success){
-    //     console.log("ifixx")
-    //     await put_habitat()
-    //     console.log("<<<<ifx")
-    // }
-    // else{
-    //     console.log(move_result, "<<<else")
-    // }
-    // return move_result
 }
 
-get_habitat();
+async function edit_click() {
+    return new Promise((resolve)=>{
+        function clk(evt){
+            let target = evt.target
+            // console.log(target)
+            // resolve(target)
+            // console.dir(target)
+            // console.log(target.alt)
+            if (target.tagName=="IMG"){
+                let g = target.alt
+                // console.log(g,'the value inside if stmnt')
+                divbox_selection.removeEventListener('click', clk)
+                resolve(g)
+            }
+            if (target.tagName=="TD"){
+                let g = target.innerText
+                // console.log(g, 'the value of habitat row')
+                // console.log(g.split(" ")[1], 'this is hab no')
+                let p = g.split(" ")[1]
 
-put_habitat();
+                // if(p)
+                // console.log(typeof(p))
+                if (g.startsWith('Un')){
+                    // console.log('unplaced')
+                    let g = "U"
+                    divbox_selection.removeEventListener('click', clk)
+                    resolve(g)
 
+
+                }
+                else {
+                    // console.log('habitat with numbers')
+                    let q = p
+                    divbox_selection.removeEventListener('click', clk)
+                    let z = parseInt(q)
+                    resolve(z)
+                }
+            }
+
+
+        }
+       divbox_selection.addEventListener('click', clk)
+        // console.log(x)
+    })
+    
+}
+
+
+// console.log(habitat_event_caught)
+// }
+
+async function befor_move_api(crt_name, hab_id) {
+    let result = await get_habitat_api()
+    console.log(result.habitats, "this is habitat")
+    console.log(result.unplaced, "This is unplaced")
+    console.log(crt_name, hab_id, 'inside before move api fn')
+    const habitats_creature_id = []
+    const creature_own_list =[]
+    console.log(result.habitats.length, "now go to loop from this")
+    let call_move_crt_id = null
+    let call_move_hab_id = null
+    for (let i = 0; i<result.habitats.length; i++){
+        let tot = result.habitats[i]['creatures']
+        let g = result.habitats[i]['number']
+        // console.log(typeof(g))
+        console.log(g, "habitat id number")
+        if (hab_id===g){
+            call_move_hab_id = result.habitats[i]['id']
+            console.log(call_move_hab_id, "onceeeeeeeee")
+        }
+        // console.log(tot, `this is ${i} loop`)
+        for (let j =0; j <tot.length; j++){
+            let b = result.habitats[i]['creatures'][j]["id"]
+            let c = result.habitats[i]['creatures'][j]["nickname"]
+            console.log(b, 'hello', j, 'loop')
+            habitats_creature_id.push(b)
+            let response = {
+                'id' : b,
+                'creature_name': c
+            }
+            creature_own_list.push(response)
+
+        }        
+        }
+    for  (let i =0; i<result.unplaced.length; i++){
+        let b = result.unplaced[i]['id']
+        let c = result.unplaced[i]['nickname']
+        console.log(b, "this is b")
+        habitats_creature_id.push(b)
+        let zilo = {
+            'id': b,
+            'creature_name': c
+        }
+        creature_own_list.push(zilo)
+        
+    }
+    
+        console.log(habitats_creature_id, 'this is the list')
+
+        // console.log(crt_name, 'crt_name  ')
+        // console.log(hab_id, "hab_id")
+        console.log(creature_own_list, 'this is the creature own list')
+        console.log(creature_own_list.length, 'this is the creature own list length')
+        for (let i = 0; i<creature_own_list.length; i++){
+            console.log(creature_own_list[i].creature_name, "name printing insite for last")
+            let c = creature_own_list[i].creature_name
+            console.log(creature_own_list[i].id, "name printing insite for last")
+            let l = creature_own_list[i].id
+            if (crt_name.toLowerCase() ===c.toLowerCase()){
+                call_move_crt_id = creature_own_list[i].id
+            }
+
+            
+
+
+        }
+        console.log(call_move_crt_id, call_move_hab_id, 'this is to be passed to move api')
+        if (call_move_crt_id && call_move_hab_id){
+            console.log('true')
+        }
+        if (!call_move_crt_id && call_move_hab_id){
+            console.log('false')
+        }
+        let move_now = await move_habitat_API(call_move_crt_id, call_move_hab_id)
+
+        console.log(move_now)
+    
+        if (move_now.success){
+            await get_habitat()
+            edit_text.innerText = `${move_now['messages'][1]}`
+            setTimeout(() => {
+                edit_text.innerText = ''
+                
+            }, 3000);
+        }
+        if (!move_now.success){
+            edit_text.innerText = `${move_now['messages'][1]}`
+            setTimeout(() =>{
+                edit_text.innerText = ''
+            }, 3000)
+        }
+    
+
+
+    
+}
+
+
+get_habitat()
+
+const backBtn = document.getElementById("Backbtn");
+if (backBtn) {
+  backBtn.addEventListener("click", () => {
+    location.href = "/game" + location.search;
+  });
+}
